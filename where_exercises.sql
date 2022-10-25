@@ -73,10 +73,10 @@ SELECT *
 
 SELECT *
 	FROM employees
-	 WHERE last_name LIKE 'q%' OR last_name LIKE '%q%' OR last_name LIKE '%q';
+	 WHERE last_name LIKE '%q%';
 
 /* Find all current or previous employees with a 'q' in their last name but not 'qu'. How many employees are found? 547*/
 
 SELECT *
 	FROM employees
-	 WHERE (last_name LIKE 'q%' OR last_name LIKE '%q%' OR last_name LIKE '%q') AND NOT (last_name LIKE 'qu%' OR last_name LIKE '%qu%' OR last_name LIKE '%qu');
+	 WHERE (last_name LIKE '%q%') AND NOT (last_name LIKE '%qu%');
