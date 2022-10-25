@@ -45,7 +45,7 @@ SELECT *
 
 SELECT *
 	FROM employees
-	 WHERE last_name LIKE'E%' AND last_name LIKE '%E';
+	 WHERE last_name LIKE'E%e';
 	 
 SELECT *
 	FROM employees
@@ -53,30 +53,30 @@ SELECT *
 
 /* Find all current or previous employees hired in the 90s. Enter a comment with the number of employees returned. 135214*/
 
-SELECT *
+SELECT count(*)
 	FROM employees
 	 WHERE hire_date LIKE '199%';
 
 /* Find all current or previous employees born on Christmas. Enter a comment with the number of employees returned. 842*/
 
-SELECT *
+SELECT count(*)
 	FROM employees
 	 WHERE birth_date LIKE '%12-25';
 
 /* Find all current or previous employees hired in the 90s and born on Christmas. Enter a comment with the number of employees returned. 362 */
 
-SELECT *
+SELECT count(*)
 	FROM employees
 	 WHERE hire_date LIKE '199%' AND birth_date LIKE '%12-25';
 
 /* Find all current or previous employees with a 'q' in their last name. Enter a comment with the number of records returned. 1873 */
 
-SELECT *
+SELECT count(*)
 	FROM employees
 	 WHERE last_name LIKE '%q%';
 
 /* Find all current or previous employees with a 'q' in their last name but not 'qu'. How many employees are found? 547*/
 
-SELECT *
+SELECT count(*)
 	FROM employees
 	 WHERE (last_name LIKE '%q%') AND NOT (last_name LIKE '%qu%');
