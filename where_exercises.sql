@@ -51,11 +51,11 @@ SELECT *
 	FROM employees
 	 WHERE last_name LIKE '%E';
 
-/* Find all current or previous employees hired in the 90s. Enter a comment with the number of employees returned. 25,610*/
+/* Find all current or previous employees hired in the 90s. Enter a comment with the number of employees returned. 135214*/
 
 SELECT *
 	FROM employees
-	 WHERE hire_date LIKE '1990%';
+	 WHERE hire_date LIKE '199%';
 
 /* Find all current or previous employees born on Christmas. Enter a comment with the number of employees returned. 842*/
 
@@ -63,11 +63,11 @@ SELECT *
 	FROM employees
 	 WHERE birth_date LIKE '%12-25';
 
-/* Find all current or previous employees hired in the 90s and born on Christmas. Enter a comment with the number of employees returned. 77 */
+/* Find all current or previous employees hired in the 90s and born on Christmas. Enter a comment with the number of employees returned. 362 */
 
 SELECT *
 	FROM employees
-	 WHERE hire_date LIKE '1990%' AND birth_date LIKE '%12-25';
+	 WHERE hire_date LIKE '199%' AND birth_date LIKE '%12-25';
 
 /* Find all current or previous employees with a 'q' in their last name. Enter a comment with the number of records returned. 1873 */
 
