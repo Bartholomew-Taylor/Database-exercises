@@ -43,7 +43,7 @@ Write a query to to find all employees whose last name starts and ends with 'E'.
 
 SELECT *
 FROM employees
-WHERE last_name LIKE '%E' AND last_name LIKE 'e%'
+WHERE last_name LIKE '%E%'
 ORDER BY emp_no ASC;
 
 /*
