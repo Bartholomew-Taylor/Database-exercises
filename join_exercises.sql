@@ -33,5 +33,14 @@ JOIN salaries ON salaries.emp_no = dept_manager.emp_no
 Join employees ON employees.emp_no = dept_manager.emp_no
 WHERE salaries.to_date LIKE '9999%';
 
+#6 Find the number of current employees in each department.
+
+SELECT departments.dept_name AS department, COUNT(employees.emp_no) AS num_emp
+from departments
+Join dept_emp USING(dept_no)
+Join employees ON employees.emp_no = dept_emp.emp_no
+WHERE dept_emp.to_date LIKE "9999%"
+GROUP BY department; #count verified
+
 
 
