@@ -26,13 +26,12 @@ WHERE departments.dept_name = "Customer Service" AND dept_emp.to_date LIKE "9999
 
 #5 Find the current salary of all current managers.
 
-SELECT departments.dept_name AS department, CONCAT(employees.first_name, ' ', employees.last_name) AS managers, salaries.salary AS salary
+SELECT DISTINCT departments.dept_name AS department, CONCAT(employees.first_name, ' ', employees.last_name) AS managers, salaries.salary AS salary
 from departments
 Join dept_manager USING(dept_no)
 JOIN salaries ON salaries.emp_no = dept_manager.emp_no
 Join employees ON employees.emp_no = dept_manager.emp_no
-WHERE dept_manager.to_date LIKE '9999%'
-GROUP BY department, managers, salary;
+WHERE salaries.to_date LIKE '9999%';
 
-# solve repeat salary issue
+
 
