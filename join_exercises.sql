@@ -13,18 +13,18 @@ ORDER BY department;
 
 SELECT departments.dept_name as department, CONCAT(employees.first_name, ' ', employees.last_name) AS 'manager name'
 from departments
-Join dept_manager USING(dept_no)
-Join employees ON employees.emp_no = dept_manager.emp_no
-WHERE dept_manager.to_date LIKE '9999%' AND employees.gender = 'f'
+Join dept_manager ON dept_manager.dept_no = departments.dept_no AND dept_manager.to_date LIKE '9999%'
+Join employees ON employees.emp_no = dept_manager.emp_no AND employees.gender = 'f'
 ORDER BY department ASC;
 
 #4 Find the current titles of employees currently working in the Customer Service department.
 
-SELECT departments.dept_name, CONCAT(employees.first_name, ' ', employees.last_name)
-from departments
-Join dept_emp USING(dept_no)
-Join employees ON employees.emp_no = dept_emp.emp_no
-WHERE departments.dept_name = "Customer Service" AND dept_emp.to_date LIKE "9999%";
+SELECT titles.title AS title, count(title)
+FROM dept_emp
+JOIN titles on dept_emp.emp_no = titles.emp_no AND titles.to_date LIKE '9999%' AND dept_emp.to_date LIKE '9999%'
+JOIN departments ON departments.dept_no = dept_emp.dept_no and dept_name = 'customer service'
+GROUP BY title
+ORDER BY title ASC;
 
 #5 Find the current salary of all current managers.
 
@@ -48,13 +48,14 @@ ORDER BY dept_no ASC;
 
 #7 Which department has the highest average salary? Hint: Use current not historic information.
 
-SELECT DISTINCT departments.dept_name AS department, (avg(salaries.salary)) AS salary
+SELECT DISTINCT departments.dept_name AS department, ROUND(avg(salaries.salary),2) AS salary
 FROM salaries
 JOIN dept_emp ON dept_emp.emp_no = salaries.emp_no
 JOIN departments ON departments.dept_no = dept_emp.dept_no
 WHERE dept_emp.to_date LIKE "9999%" 
 GROUP BY department
-ORDER BY department;
+ORDER BY salary DESC
+LIMIT 1;
 
 #8 Who is the highest paid employee in the Marketing department?
 
