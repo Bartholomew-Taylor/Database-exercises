@@ -24,7 +24,7 @@ SELECT emp_no
 	 WHERE to_date > CURDATE();
 	 
 #2 answer below	 
-SELECT title, emp_no 
+SELECT title
 	FROM titles
 	 WHERE emp_no IN (
 	 SELECT emp_no
@@ -33,7 +33,8 @@ SELECT title, emp_no
 	 and emp_no IN
 	 (SELECT emp_no 
 	FROM dept_emp
-	 WHERE to_date LIKE '9999%'));
+	 WHERE to_date LIKE '9999%'))
+	 GROUP BY titles.title;
 	 
 #3 How many people in the employees table are no longer working for the company? Give the answer in a comment in your code.
 
