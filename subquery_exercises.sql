@@ -52,17 +52,32 @@ JOIN employees ON employees.emp_no = dept_manager.emp_no AND dept_manager.to_dat
 WHERE dept_manager.emp_no IN (
 	SELECT employees.emp_no
 	FROM employees
-	WHERE gender = 'f');
+	WHERE gender = 'f')
+	ORDER BY firstname;
 	
-
-SELECT emp_no
+	SELECT emp_no
 FROM employees
 WHERE gender = 'f';
 
 SELECT emp_no
 FROM dept_emp
 WHERE to_date < CURDATE();
+	
+# 5 . Find all the employees who currently have a higher salary than the companies overall, historical average salary.	
 
+SELECT employees.emp_no, CONCAT(first_name,' ', last_name), salary
+FROM employees
+JOIN salaries ON salaries.emp_no = employees.emp_no 
+		AND salaries.salary > (SELECT AVG(salaries.salary) 
+			FROM salaries) 
+WHERE to_date > CURDATE()
+ORDER BY salary;
+
+SELECT max(salary)
+FROM salaries;
+
+SELECT avg(salary)
+FROM salaries;
 
 
 
