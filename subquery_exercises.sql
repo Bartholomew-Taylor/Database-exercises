@@ -43,8 +43,8 @@ SELECT count(*)
   WHERE to_date < CURDATE(); 
   
 SELECT COUNT(*)
-  FROM dept_emp
-  WHERE to_date NOT IN (SELECT to_date FROM dept_emp where to_date > CURDATE()); #91479
+  FROM employees
+  WHERE emp_no NOT IN (SELECT emp_no FROM dept_emp where to_date > CURDATE()); #59900
 
 
 #4 Find all the current department managers that are female. List their names in a comment in your code.
