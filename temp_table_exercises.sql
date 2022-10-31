@@ -67,3 +67,17 @@ CREATE TEMPORARY TABLE noether_2022.ind_pay_vs_dept_pay as (
 Select *
 FROM noether_2022.ind_pay_vs_dept_pay;
 
+ALTER TABLE noether_2022.ind_pay_vs_dept_pay ADD z_score_compare FLOAT; 
+UPDATE noether_2022.ind_pay_vs_dept_pay SET z_score_compare = 
+			(SELECT
+    			(salaries.salary - (SELECT AVG(salary) FROM salaries))
+    /
+    (SELECT stddev(salary) FROM salaries) AS zscore
+FROM salaries);
+
+
+SELECT dept_name, AVG(salaries.salary)
+FROM departments
+JOIN dept_emp ON dept_emp.dept_no = departments.dept_no
+JOIN salaries ON salaries.emp_no = dept_emp.emp_no
+GROUP BY dept_name;
