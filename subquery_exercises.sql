@@ -37,11 +37,13 @@ SELECT title, emp_no
 	 
 #3 How many people in the employees table are no longer working for the company? Give the answer in a comment in your code.
 
-
-
 SELECT count(*)
  FROM dept_emp
-  WHERE to_date < CURDATE();
+  WHERE to_date < CURDATE(); 
+  
+SELECT COUNT(*)
+  FROM dept_emp
+  WHERE to_date NOT IN (SELECT to_date FROM dept_emp where to_date > CURDATE()); #91479
 
 
 #4 Find all the current department managers that are female. List their names in a comment in your code.
@@ -83,17 +85,14 @@ FROM salaries;
 #salary? (Hint: you can use a built in function to calculate the standard deviation.) 
 #What percentage of all salaries is this?
 
-SELECT count(*) AS num_of_emps, (COUNT(*)/(SELECT COUNT(to_date) FROM salaries
-								WHERE to_date > CURDATE()))*100 AS percent_of_emps
-FROM employees
-JOIN salaries ON salaries.emp_no = employees.emp_no
-WHERE salary between (SELECT (MAX(salary)-STD(salary)) FROM salaries) 
-		AND (SELECT(MAX(salary)+ STD(salary)) FROM salaries)
-		AND salaries.to_date > CURDATE();
-
 SELECT salary FROM salaries
 WHERE to_date > CURDATE();
 
-
+SELECT count(*) AS num_of_emps, (COUNT(*)/(SELECT COUNT(to_date) FROM salaries
+								WHERE to_date > CURDATE()))*100 AS percent_of_emps
+FROM salaries
+WHERE salary between (SELECT (MAX(salary)-STD(salary)) FROM salaries) 
+		AND (SELECT(MAX(salary)+ STD(salary)) FROM salaries)
+		AND salaries.to_date > CURDATE();
 
 
