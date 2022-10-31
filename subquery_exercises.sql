@@ -65,7 +65,7 @@ WHERE to_date < CURDATE();
 	
 # 5 . Find all the employees who currently have a higher salary than the companies overall, historical average salary.	
 
-SELECT employees.emp_no, CONCAT(first_name,' ', last_name), salary
+SELECT employees.emp_no, CONCAT(first_name,' ', last_name) AS emp_name, salary
 FROM employees
 JOIN salaries ON salaries.emp_no = employees.emp_no 
 		AND salaries.salary > (SELECT AVG(salaries.salary) 
@@ -79,8 +79,20 @@ FROM salaries;
 SELECT avg(salary)
 FROM salaries;
 
+#6 How many current salaries are within 1 standard deviation of the current highest 
+#salary? (Hint: you can use a built in function to calculate the standard deviation.) 
+#What percentage of all salaries is this?
 
+SELECT count(*) AS num_of_emps, (COUNT(*)/(SELECT COUNT(to_date) FROM salaries
+								WHERE to_date > CURDATE()))*100 AS percent_of_emps
+FROM employees
+JOIN salaries ON salaries.emp_no = employees.emp_no
+WHERE salary between (SELECT (MAX(salary)-STD(salary)) FROM salaries) 
+		AND (SELECT(MAX(salary)+ STD(salary)) FROM salaries)
+		AND salaries.to_date > CURDATE();
 
+SELECT salary FROM salaries
+WHERE to_date > CURDATE();
 
 
 
