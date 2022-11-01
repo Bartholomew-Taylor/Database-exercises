@@ -18,7 +18,8 @@ FROM noether_2022.employees_with_departments;
 
 #1.a Add a column named full_name to this table. It should be a VARCHAR whose length is the sum of the lengths of the first name and last name columns
 
-ALTER TABLE noether_2022.employees_with_departments ADD full_name VARCHAR(30);
+ALTER TABLE noether_2022.employees_with_departments ADD full_name VARCHAR(31);
+DESCRIBE employees_with_departments;
 
 #1b Update the table so that full name column contains the correct data
 
@@ -45,6 +46,8 @@ CREATE TEMPORARY TABLE noether_2022.payments_copy AS (
 select *
 FROM noether_2022.payments_copy;
 
+SELECT CAST(amount * 100 AS UNSIGNED) AS cents
+FROM noether_2022.payments_copy;
 
 ALTER TABLE noether_2022.payments_copy ADD amount_in_cents INT;
 UPDATE noether_2022.payments_copy SET amount_in_cents = amount * 100;
@@ -53,31 +56,35 @@ ALTER TABLE noether_2022.payments_copy DROP COLUMN amount;
 
 # 3 Find out how the current average pay in each department compares to the overall current pay for everyone at the company. In order to make the comparison easier, you should use the Z-score for salaries. In terms of salary, what is the best department right now to work for? The worst?
 
-DROP TABLE IF EXISTS noether_2022.ind_pay_vs_dept_pay;
+DROP TABLE IF EXISTS noether_2022.overall_agg;
+#review solution involved
 
-CREATE TEMPORARY TABLE noether_2022.ind_pay_vs_dept_pay as (
-						SELECT CONCAT(employees.first_name,' ', employees.last_name),
-										employees.emp_no, salaries.salary, departments.dept_name
-							 FROM employees.employees
-							 JOIN dept_emp USING(emp_no)
-							 JOIN salaries USING(emp_no)							 JOIN departments USING(dept_no) 
-							 WHERE salaries.to_date > CURDATE()
+CREATE TEMPORARY TABLE noether_2022.overall_agg; as (
+							SELECT AVG (salary) AS avg_salary, STD(salary) AS std_salary
+									FROM 
+											
 							);
 							
+# average salary by department
+CREATE TEMPORARY TABLE noether_2022.metrics AS (
+		SELECT dept_name, AVG(salary) AS dept_average
+			FROM employees.salaries
+			JOIN employees.dept_emp USING (emp_no)			JOIN employees.departments USING (dept_no)
+			WHERE employees.dept_emp.to_date > NOW()
+			AND employees
+			
+			)
+							
+							
+#create columns for table
+ALTER TABLE noether_2022.metrics ADD overall_avg FLOAT(10,2)
+ALTER TABLE noether_2022.metrics ADD overall_std FLOAT(10,2)
+ALTER TABLE noether_2022.metrics ADD dept_zscore FLOAT(10,2)
+
+UPDATE noether_2022.metrics SET overall_avg = (SELECT avg_salary FROM noether_2022.overall_agg);
+
+UPDATE noether_2022.metrics SET dept_zscore = (dept_average - overall_avg)/overall_std;
+
 Select *
 FROM noether_2022.ind_pay_vs_dept_pay;
 
-ALTER TABLE noether_2022.ind_pay_vs_dept_pay ADD z_score_compare FLOAT; 
-UPDATE noether_2022.ind_pay_vs_dept_pay SET z_score_compare = 
-			(SELECT
-    			(salaries.salary - (SELECT AVG(salary) FROM salaries))
-    /
-    (SELECT stddev(salary) FROM salaries) AS zscore
-FROM salaries);
-
-
-SELECT dept_name, AVG(salaries.salary)
-FROM departments
-JOIN dept_emp ON dept_emp.dept_no = departments.dept_no
-JOIN salaries ON salaries.emp_no = dept_emp.emp_no
-GROUP BY dept_name;
