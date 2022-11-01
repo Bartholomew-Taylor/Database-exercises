@@ -2,11 +2,11 @@ USE employees;
 
 #1. Write a query that returns all employees, their department number, their start date, their end date, and a new column 'is_current_employee' that is a 1 if the employee is still with the company and 0 if not.
 
-SELECT CONCAT(employees.first_name, ' ', employees.last_name) AS full_name, 
-		dept_emp.dept_no AS dept_no, 
-		 dept_emp.from_date AS start_date, 
-		 dept_emp.to_date AS end_date, 
-		IF(dept_emp.to_date > CURDATE(), true, false) AS is_current_employee
+SELECT CONCAT(first_name, ' ', last_name) AS full_name, 
+		dept_no AS dept_no, 
+		 from_date AS start_date, 
+		 to_date AS end_date, 
+		IF(to_date > CURDATE(), true, false) AS is_current_employee
 	FROM employees
 	 JOIN dept_emp USING(emp_no)
 	 JOIN departments USING(dept_no);
@@ -38,7 +38,7 @@ GROUP BY decade;
 
 #4. What is the current average salary for each of the following department groups: R&D, Sales & Marketing, Prod & QM, Finance & HR, Customer Service?
 
-SELECT ROUND(AVG(salaries.salary),2),
+SELECT ROUND(AVG(salary),2) AS AVG_SALARY,
  CASE 
  	WHEN dept_name IN ('research','development') THEN 'R&D'
  	WHEN dept_name IN ('sales', 'marketing') THEN 'Sales_&_Marketing'
@@ -50,8 +50,8 @@ FROM departments
 JOIN dept_emp USING(dept_no)
 JOIN salaries USING(emp_no)
 WHERE dept_emp.to_date > CURDATE()
+	AND salaries.to_date > CURDATE()
 GROUP BY name_of_dept;
-
 
 
 
